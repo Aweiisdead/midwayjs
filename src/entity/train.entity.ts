@@ -17,8 +17,14 @@ export class Train {
   status: string;
   //创建时间
   @Column()
-  create_time: string;
+  create_time: Date;
   //更新
   @Column()
-  update_time: string;
+  update_time: Date;
+  //生产日期
+  @Column()
+  factory_date: Date;
+  //生产日期
+  @Column()
+  last_fixed_date: Date;
 }

@@ -26,7 +26,7 @@ export class TrainController {
   }
   @ApiOperation({ summary: '添加列车' })
   @Post('/add')
-  async add(@Body('data') data: any): Promise<any> {
+  async add(@Body() data: any): Promise<any> {
     return this.trainService.addTrain(data);
   }
   @ApiOperation({ summary: '删除列车' })
@@ -36,8 +36,8 @@ export class TrainController {
   }
   @ApiOperation({ summary: '修改列车' })
   @Put('/update')
-  async update(@Query('id') id: string | number): Promise<any> {
-    return this.trainService.delTrain(id);
+  async update(@Body() data: any): Promise<any> {
+    return this.trainService.updateTrain(data);
   }
   @Get('/page')
   async page(@Query() query) {

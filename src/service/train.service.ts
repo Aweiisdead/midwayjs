@@ -27,13 +27,18 @@ export class TrainService extends BaseService {
     }
   }
   async addTrain(data) {
-    await this.trainModel.save(data).then(res => {
+    let time = new Date();
+    let params = { ...data, create_time: time };
+    try {
+      await this.trainModel.save(params);
       return {
         code: 200,
         message: '添加成功',
         success: true,
       };
-    });
+    } catch (error) {
+      throw new CustomError(error, 500);
+    }
   }
   async delTrain(id) {
     let result: any = {};
@@ -55,13 +60,27 @@ export class TrainService extends BaseService {
     }
   }
   async updateTrain(params) {
-    await this.trainModel.update(params.id, params).then(res => {
-      return {
-        code: 200,
-        message: '修改成功',
-        success: true,
-      };
-    });
+    let result: any = {};
+    let time = new Date();
+    params.update_time = time;
+    try {
+      result = await this.trainModel
+        .createQueryBuilder()
+        .where({ id: params.id })
+        .update(params)
+        .execute();
+      if (result.affected > 0) {
+        return {
+          code: 200,
+          data: result,
+          success: result.affected > 0,
+        };
+      } else {
+        throw new CustomError('修改失败', 500);
+      }
+    } catch (error) {
+      throw new CustomError(error, 500);
+    }
   }
   async gtTrainPage(params) {
     let result = [];
